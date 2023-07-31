@@ -20,4 +20,4 @@ jobs:
         uses: NuGet/setup-nuget@v1.2.0
 
       - name: Build the Solution
-        run: msbuild Archon.SwissArmyLib.sln
+        run: msbuild Archon.SwissArmyLib.sln /p:Configuration=Release
