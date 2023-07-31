@@ -8,6 +8,7 @@ using Archon.SwissArmyLib.Pooling;
 using Archon.SwissArmyLib.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Archon.SwissArmyLib.Coroutines
 {
@@ -31,7 +32,7 @@ namespace Archon.SwissArmyLib.Coroutines
     ///     <item><description><see cref="WaitForEndOfFrame"/></description></item>
     ///     <item><description><see cref="WaitUntil"/></description></item>
     ///     <item><description><see cref="WaitWhile"/></description></item>
-    ///     <item><description><see cref="WaitForWWW"/></description></item>
+    ///     <item><description><see cref="WaitForWebRequest"/></description></item>
     ///     <item><description><see cref="WaitForAsyncOperation"/></description></item>
     /// </list>
     /// </summary>
@@ -47,14 +48,20 @@ namespace Archon.SwissArmyLib.Coroutines
         /// </summary>
         public static readonly WaitForEndOfFrame WaitForEndOfFrame = new WaitForEndOfFrame();
 
-        private static readonly Pool<LinkedListNode<BetterCoroutine>> SharedNodePool = new Pool<LinkedListNode<BetterCoroutine>>(() => new LinkedListNode<BetterCoroutine>(null));
+        private static readonly Pool<LinkedListNode<BetterCoroutine>> SharedNodePool =
+            new Pool<LinkedListNode<BetterCoroutine>>(() => new LinkedListNode<BetterCoroutine>(null));
 
-        private static readonly Dictionary<int, PooledLinkedList<BetterCoroutine>> UpdateLoopToCoroutines = new Dictionary<int, PooledLinkedList<BetterCoroutine>>();
-        private static readonly PooledLinkedList<BetterCoroutine> CoroutinesWaitingForEndOfFrame = new PooledLinkedList<BetterCoroutine>(SharedNodePool);
+        private static readonly Dictionary<int, PooledLinkedList<BetterCoroutine>> UpdateLoopToCoroutines =
+            new Dictionary<int, PooledLinkedList<BetterCoroutine>>();
+
+        private static readonly PooledLinkedList<BetterCoroutine> CoroutinesWaitingForEndOfFrame =
+            new PooledLinkedList<BetterCoroutine>(SharedNodePool);
 
         private static LinkedListNode<BetterCoroutine> _current;
 
-        private static readonly DictionaryWithDefault<int, BetterCoroutine> IdToCoroutine = new DictionaryWithDefault<int, BetterCoroutine>();
+        private static readonly DictionaryWithDefault<int, BetterCoroutine> IdToCoroutine =
+            new DictionaryWithDefault<int, BetterCoroutine>();
+
         private static int _nextId = 1;
 
         private static readonly BetterCoroutines Instance = new BetterCoroutines();
@@ -75,7 +82,6 @@ namespace Archon.SwissArmyLib.Coroutines
 
         private BetterCoroutines()
         {
-
         }
 
         /// <summary>
@@ -197,7 +203,8 @@ namespace Archon.SwissArmyLib.Coroutines
             var list = GetList(coroutine.UpdateLoopId);
             if (list == null)
             {
-                UpdateLoopToCoroutines[coroutine.UpdateLoopId] = list = new PooledLinkedList<BetterCoroutine>(SharedNodePool);
+                UpdateLoopToCoroutines[coroutine.UpdateLoopId] =
+                    list = new PooledLinkedList<BetterCoroutine>(SharedNodePool);
                 ManagedUpdate.AddListener(coroutine.UpdateLoopId, Instance);
             }
 
@@ -424,16 +431,17 @@ namespace Archon.SwissArmyLib.Coroutines
         }
 
         /// <summary>
-        /// Waits until the specified <see cref="WWW"/> object has finished.
+        /// Waits until the specified <see cref="UnityWebRequestAsyncOperation"/> object has finished.
         /// </summary>
-        /// <param name="www">The WWW object to wait for.</param>
+        /// <param name="webRequestAsyncOperation">The UnityWebRequest AsyncOperation to wait for.</param>
         /// <returns></returns>
-        public static IEnumerator WaitForWWW(WWW www)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static IEnumerator WaitForWebRequest(UnityWebRequestAsyncOperation webRequestAsyncOperation)
         {
-            if (ReferenceEquals(www, null))
-                throw new ArgumentNullException("www");
+            if (ReferenceEquals(webRequestAsyncOperation, null))
+                throw new ArgumentNullException("webRequestAsyncOperation");
 
-            return Coroutines.WaitForWWW.Create(www);
+            return Coroutines.WaitForWebRequest.Create(webRequestAsyncOperation);
         }
 
         /// <summary>
@@ -524,7 +532,8 @@ namespace Archon.SwissArmyLib.Coroutines
             if (coroutine.IsLinkedToObject && (!coroutine.LinkedObject || !coroutine.LinkedObject.activeInHierarchy))
                 return false;
 
-            if (coroutine.IsLinkedToComponent && (!coroutine.LinkedComponent || !coroutine.LinkedComponent.isActiveAndEnabled))
+            if (coroutine.IsLinkedToComponent &&
+                (!coroutine.LinkedComponent || !coroutine.LinkedComponent.isActiveAndEnabled))
                 return false;
 
             if (coroutine.IsPaused || coroutine.IsParentPaused)
@@ -570,6 +579,7 @@ namespace Archon.SwissArmyLib.Coroutines
                     coroutine.Child = subroutine;
                     subroutine.Parent = coroutine;
                 }
+
                 return true;
             }
 
@@ -596,11 +606,14 @@ namespace Archon.SwissArmyLib.Coroutines
                 return true;
             }
 
-            var www = current as WWW;
-            if (www != null)
+            var webRequest = current as UnityWebRequestAsyncOperation;
+            if (webRequest != null)
             {
-                if (!www.isDone)
-                    StartChild(Coroutines.WaitForWWW.Create(www), coroutine);
+                if (!webRequest.isDone)
+                {
+                    StartChild(Coroutines.WaitForWebRequest.Create(webRequest), coroutine);
+                }
+
                 return true;
             }
 
@@ -608,13 +621,19 @@ namespace Archon.SwissArmyLib.Coroutines
             if (asyncOperation != null)
             {
                 if (!asyncOperation.isDone)
+                {
                     StartChild(Coroutines.WaitForAsyncOperation.Create(asyncOperation), coroutine);
+                }
+
                 return true;
             }
 
             // we could use reflection, but it's slow and users really should switch over.
             if (current is WaitForSeconds)
-                Debug.LogError("UnityEngine.WaitForSeconds is not supported in BetterCoroutines. Please use BetterCoroutines.WaitForSeconds() instead.");
+            {
+                Debug.LogError(
+                    "UnityEngine.WaitForSeconds is not supported in BetterCoroutines. Please use BetterCoroutines.WaitForSeconds() instead.");
+            }
 
             return true;
         }
@@ -623,7 +642,9 @@ namespace Archon.SwissArmyLib.Coroutines
         {
             PooledLinkedList<BetterCoroutine> coroutineList;
             if (UpdateLoopToCoroutines.TryGetValue(eventId, out coroutineList))
+            {
                 Update(coroutineList);
+            }
         }
 
         private static int GetEventId(UpdateLoop updateLoop)
@@ -645,7 +666,7 @@ namespace Archon.SwissArmyLib.Coroutines
         {
             float currentTime;
 
-            if (updateLoopId == ManagedUpdate.EventIds.FixedUpdate 
+            if (updateLoopId == ManagedUpdate.EventIds.FixedUpdate
                 || ManagedUpdate.GetParentLoopForid(updateLoopId) == UpdateLoop.FixedUpdate)
             {
                 currentTime = unscaled
@@ -680,7 +701,9 @@ namespace Archon.SwissArmyLib.Coroutines
                     var shouldContinue = UpdateCoroutine(scaledTime, unscaledTime, routine);
 
                     if (!shouldContinue)
+                    {
                         Stop(routine);
+                    }
                 }
 
                 CoroutinesWaitingForEndOfFrame.Remove(current);

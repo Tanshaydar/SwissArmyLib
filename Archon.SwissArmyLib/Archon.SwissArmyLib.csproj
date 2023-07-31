@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Archon.SwissArmyLib</RootNamespace>
     <AssemblyName>Archon.SwissArmyLib</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -69,13 +70,13 @@
     <Compile Include="Coroutines\BetterCoroutine.cs" />
     <Compile Include="Coroutines\BetterCoroutinesExtensions.cs" />
     <Compile Include="Coroutines\IPoolableYieldInstruction.cs" />
+    <Compile Include="Coroutines\WaitForWebRequest.cs" />
     <Compile Include="Events\Loops\ICustomUpdateLoop.cs" />
     <Compile Include="Utils\MainThreadDispatcher.cs" />
     <Compile Include="Utils\UpdateLoop.cs" />
     <Compile Include="Coroutines\WaitForAsyncOperation.cs" />
     <Compile Include="Coroutines\WaitForSecondsLite.cs" />
     <Compile Include="Coroutines\WaitForSecondsRealtimeLite.cs" />
-    <Compile Include="Coroutines\WaitForWWW.cs" />
     <Compile Include="Coroutines\WaitUntilLite.cs" />
     <Compile Include="Coroutines\WaitWhileLite.cs" />
     <Compile Include="Events\BuiltinEventIds.cs" />
