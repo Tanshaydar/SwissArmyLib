@@ -15,6 +15,9 @@ jobs:
       
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1.3.1
+        
+      - name: Setup NuGet.exe for use with actions
+        uses: NuGet/setup-nuget@v1.2.0
 
       - name: Build the Solution
         run: msbuild Archon.SwissArmyLib.sln
