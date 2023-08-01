@@ -9,6 +9,7 @@ This is an unofficial fork of SwissArmyLib repository. I've used this library in
 ----
 
 Original:
+
 .. image:: https://raw.githubusercontent.com/Tanshaydar/SwissArmyLib/master/logo.png
 
 SwissArmyLib
