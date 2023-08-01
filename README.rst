@@ -1,4 +1,6 @@
-[![CI](https://github.com/Tanshaydar/SwissArmyLib/actions/workflows/CI.yml/badge.svg)](https://github.com/Tanshaydar/SwissArmyLib/actions/workflows/CI.yml)
+.. image:: https://github.com/Tanshaydar/SwissArmyLib/actions/workflows/CI.yml/badge.svg
+    :alt: Build status
+    :target: https://github.com/Tanshaydar/SwissArmyLib/actions/workflows/CI.yml
 
 SwissArmyLib Maintained
 ============
