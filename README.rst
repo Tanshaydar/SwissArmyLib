@@ -1,4 +1,13 @@
-.. image:: https://raw.githubusercontent.com/ArchonInteractive/SwissArmyLib/master/logo.png
+[![CI](https://github.com/Tanshaydar/SwissArmyLib/actions/workflows/CI.yml/badge.svg)](https://github.com/Tanshaydar/SwissArmyLib/actions/workflows/CI.yml)
+
+SwissArmyLib Maintained
+============
+This is an unofficial fork of SwissArmyLib repository. I've used this library in many projects (both commercial and personal) and I still use it. However, instead of importing source code into the project every time, it'd be easier to maintain the .dll files.
+
+----
+
+Original:
+.. image:: https://raw.githubusercontent.com/Tanshaydar/SwissArmyLib/master/logo.png
 
 SwissArmyLib
 ============
