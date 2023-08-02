@@ -33,15 +33,16 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: SwissArmyLib-release-1.${{ github.run_number }}.${{ github.run_attempt }}.zip
+          name: SwissArmyLib-release-1.${{ github.run_number }}.${{ github.run_attempt }}
           # A file, directory or wildcard pattern that describes what to upload
           path: ${{ github.workspace }}\bin\Release
           # The desired behavior if no files are found using the provided path.
       - uses: actions/download-artifact@v3
         with:
-          name: SwissArmyLib-release-1.${{ github.run_number }}.${{ github.run_attempt }}.zip
+          name: SwissArmyLib-release-1.${{ github.run_number }}.${{ github.run_attempt }}
+      
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        #if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: SwissArmyLib-release-1.${{ github.run_number }}.${{ github.run_attempt }}.zip
+          files: SwissArmyLib-release-1.${{ github.run_number }}.${{ github.run_attempt }}
