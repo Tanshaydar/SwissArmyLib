@@ -2,6 +2,10 @@
     :alt: Build status
     :target: https://github.com/Tanshaydar/SwissArmyLib/actions/workflows/CI.yml
 
+.. image:: https://github.com/Tanshaydar/SwissArmyLib/actions/workflows/github-code-scanning/codeql/badge.svg
+    :alt: CodeQL
+    :target: https://github.com/Tanshaydar/SwissArmyLib/actions/workflows/github-code-scanning/codeql
+
 SwissArmyLib Maintained
 ============
 This is an unofficial fork of **SwissArmyLib** repository. I've used this library in many projects (*both commercial and personal*) and I still use it. However, instead of importing source code into the project every time, for me it'd be easier to maintain the **.dll** files. Hence this repo and integrations.
