@@ -12217,7 +12217,7 @@ You must implement Editor.HasPreviewGUI for this method to be called.</para>
     </member>
     <member name="P:UnityEditor.EditorApplication.applicationPath">
       <summary>
-        <para>Returns the path to the Unity editor application. (Read Only)</para>
+        <para>Gets the path to the Unity Editor application. (Read Only)</para>
       </summary>
     </member>
     <member name="F:UnityEditor.EditorApplication.contextualPropertyMenu">
@@ -29133,7 +29133,7 @@ Note: Use HandleUtility.GetHandleSize where you might want to have constant scre
       <summary>
         <para>Pick GameObjects that lie within a specified screen rectangle.</para>
       </summary>
-      <param name="rect">An screen rectangle specified with pixel coordinates.</param>
+      <param name="rect">A screen rectangle specified with pixel coordinates.</param>
     </member>
     <member name="M:UnityEditor.HandleUtility.PickRectObjects(UnityEngine.Rect,System.Boolean)">
       <summary>
